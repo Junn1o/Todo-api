@@ -16,11 +16,10 @@ namespace Todo_api.Models.Domain
         public string? IsNotification { get; set; }
         public required DateTime DueDate { get; set; }
         public DateTime? ModifyDate { get; set; }
-        public required Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public User User { get; set; }
-        public int? CategoryID { get; set; }
+        public Guid? CategoryID { get; set; }
         public Category Category { get; set; }
-        public Task_Assignee Task_Assignee { get; set; }
         // One Task have many SubTask
         public List<Sub_Task> SubTasks { get; set; }
     }
