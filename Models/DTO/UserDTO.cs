@@ -8,7 +8,7 @@ namespace Todo_api.Models.Data
             public Guid user_id { get; set; }
             public string name { get; set; }
             public string avatar { get; set; }
-            public List<TasksDTO> tasklist { get; set; }
+            public List<TasksDTO> task_list { get; set; }
             public class TasksDTO
             {
                 public Guid task_id { get; set; }
@@ -39,7 +39,7 @@ namespace Todo_api.Models.Data
             public string date_of_birth { get; set; }
             public string user_name { get; set; }
         }
-        public List<UserListDTO> users { get; set; }
+        public List<UserListDTO> users_list { get; set; }
         public int totalResult { get; set; }
         public int totalPages { get; set; }
     }
@@ -49,16 +49,16 @@ namespace Todo_api.Models.Data
         public string password { get; set; }
         public string name { get; set; }
         public string? avatar { get; set; }
-        public IFormFile? FileUri { get; set; }
+        public IFormFile? file_uri { get; set; }
         public DateTime date_of_birth { get; set; }
     }
     public class ResponseUserDataDTO
     {
-        public Guid UserID { get; set; }
-        public required string UserName { get; set; }
-        public required string Name { get; set; }
-        public string? Avatar { get; set; }
-        public required DateTime DateofBirth { get; set; }
+        public Guid user_id { get; set; }
+        public string user_name { get; set; }
+        public string name { get; set; }
+        public string avatar { get; set; }
+        public DateTime date_of_birth { get; set; }
     }
    
 }
