@@ -26,7 +26,7 @@ namespace Todo_api.Data
             modelBuilder.Entity<Category>()
                 .HasMany(t => t.Tasks)
                 .WithOne(t => t.Category)
-                .HasForeignKey(ci => ci.CategoryID);
+                .HasForeignKey(ci => ci.CategoryId);
         }
         public DbSet<Category> Category { get; set; }
         public DbSet<Sub_Task> Sub_Tasks { get; set; }
