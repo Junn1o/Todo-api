@@ -2,30 +2,30 @@
 {
     public class Sub_TaskDTO
     {
-        public Guid SubTaskId { get; set; }
-        public Guid TaskId { get; set; }
-        public required string Name { get; set; }
-        public bool? IsCompleted { get; set; }
-        public required int Position { get; set; }
+        public Guid sub_task_id { get; set; }
+        public Guid task_id { get; set; }
+        public required string name { get; set; }
+        public bool? is_complete { get; set; }
+        public required int position { get; set; }
     }
     public class Sub_TaskCreateDTO
     {
-        public Guid SubTaskId { get; set; }
-        public Guid TaskId { get; set; }
-        public required string Name { get; set; }
-        public bool? IsCompleted { get; set; }
-        public required int Position { get; set; }
+        public Guid sub_task_id { get; set; }
+        public Guid task_id { get; set; }
+        public required string name { get; set; }
+        public bool? is_complete { get; set; }
+        public required int position { get; set; }
     }
     public class Sub_TaskUpdateDTO
     {
-        public Guid SubTaskId { get; set; }
-        public Guid TaskId { get; set; }
-        public required string Name { get; set; }
-        public bool? IsCompleted { get; set; }
-        public required int Position { get; set; }
+        public Guid sub_task_id { get; set; }
+        public Guid task_id { get; set; }
+        public required string name { get; set; }
+        public bool? is_complete { get; set; }
+        public required int position { get; set; }
     }
     public class Sub_TaskDeleteDTO 
     {
-        public Guid SubTaskId { get; set; }
+        public Guid sub_task_id { get; set; }
     }
 }
