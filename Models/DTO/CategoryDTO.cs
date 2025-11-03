@@ -1,7 +1,7 @@
 ﻿using Todo_api.Models.Domain;
 namespace Todo_api.Models.DTO
 {
-    public class UserCategoryWithTaskDTO
+    public class UserCategoryWithTask
     {
         public Guid category_id { get; set; }
         public Guid user_id { get; set; }
@@ -24,6 +24,11 @@ namespace Todo_api.Models.DTO
 
         public int total_result { get; set; }
         public int total_pages { get; set; }
+    }
+    public class GetUSerCategory
+    {
+        public Guid category_id { get; set; }
+        public string category_name { get; set; }
     }
     public class CategoryRequestFromDTO
     {

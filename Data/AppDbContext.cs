@@ -27,6 +27,14 @@ namespace Todo_api.Data
                 .HasMany(t => t.Tasks)
                 .WithOne(t => t.Category)
                 .HasForeignKey(ci => ci.CategoryId);
+            modelBuilder.Entity<User_Role>()
+                .HasOne(u => u.Users)
+                .WithOne(ur => ur.User_Role)
+                .HasForeignKey<User>(ui=>ui.UserId);
+            modelBuilder.Entity<Role>()
+                .HasMany(ur => ur.User_Roles)
+                .WithOne(r=>r.Roles)
+                .HasForeignKey(ri => ri.RoleId);
         }
         public DbSet<Category> Category { get; set; }
         public DbSet<Sub_Task> Sub_Tasks { get; set; }

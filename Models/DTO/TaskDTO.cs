@@ -48,9 +48,8 @@ namespace Todo_api.Models.DTO
             public int position { get; set; }
         }
     }
-    public class TaskRequestDTO
+    public class TaskRequestFormDTO
     {
-        public Guid task_id { get; set; }
         public string task_name { get; set; }
         public string task_note { get; set; }
         public bool? is_completed { get; set; }
@@ -66,31 +65,16 @@ namespace Todo_api.Models.DTO
         public List<SubTask> subtask_form { get; set; }
         public class SubTask
         {
-            public Guid subtask_id { get; set; }
             public string subtask_name { get; set; }
             public bool? is_completed { get; set; }
             public int position { get; set; }
         }
     }
-    public class TaskUpdateDTO
+    public class SubTaskRequestFormDTO
     {
-        public string task_name { get; set; }
-        public string task_note { get; set; }
-        public bool? is_completed { get; set; }
-        public bool? is_repeat { get; set; }
-        public bool? is_importance { get; set; }
-        public string? progress { get; set; }
-        public bool? is_notification { get; set; }
-        public DateTime? due_date { get; set; }
-        public DateTime? modify_date { get; set; }
-        public required Guid user_id { get; set; }
-        public Guid? category_id { get; set; }
-        public List<SubTask> subtask_form { get; set; }
-        public class SubTask
-        {
-            public string subtask_name { get; set; }
-            public bool? is_completed { get; set; }
-            public int position { get; set; }
-        }
+        public Guid task_id { get; set; }
+        public required string name { get; set; }
+        public bool? is_complete { get; set; }
+        public required int position { get; set; }
     }
 }
