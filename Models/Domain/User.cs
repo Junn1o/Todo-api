@@ -5,7 +5,7 @@ namespace Todo_api.Models.Domain
     public class User
     {
         [Key]
-        public Guid UserID { get; set; }
+        public Guid UserId { get; set; }
         public required string UserName { get; set; }
         public required string Password { get; set; }
         public required string Name { get; set; }

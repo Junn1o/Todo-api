@@ -25,8 +25,8 @@ namespace Todo_api.Models.Data
             }
         }
         public List<UserwithTaskDTO> userwithalltask { get; set; }
-        public int totalResult { get; set; }
-        public int totalPages { get; set; }
+        public int total_result { get; set; }
+        public int total_pages { get; set; }
     }
 
     public class UserListResultDTO
@@ -40,8 +40,8 @@ namespace Todo_api.Models.Data
             public string user_name { get; set; }
         }
         public List<UserListDTO> users_list { get; set; }
-        public int totalResult { get; set; }
-        public int totalPages { get; set; }
+        public int total_result { get; set; }
+        public int total_pages { get; set; }
     }
     public class UserRequestFormDTO
     {
