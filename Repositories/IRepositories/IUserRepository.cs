@@ -5,11 +5,14 @@ namespace Todo_api.Repositories.IRepositories
 {
     public interface IUserRepository
     {
-        List<UserWithTaskDTO> userWithTaskDTOs(Guid userId, int pageSize, int pageNumber);
-        List<UserListResultDTO> getUserListResult(Guid userId, int pageSize, int pageNumber);
-        UserLoginDTO userLogin(UserLoginDTO userLoginDTO);
-        UserRequestFormDTO userRequestFormDTO(UserRequestFormDTO addUserDTO);
-        UserRequestFormDTO userUpdateFormDTO(Guid userId, UserRequestFormDTO updateDTO);
-        User deleteUser(Guid userId);
+        UserWithTaskDTO userWithTaskDTOs(int userId, int pageSize, int pageNumber);
+        UserListResultDTO getUserListResult(int pageSize, int pageNumber);
+        UserLoginDTO userLogin(string userName);
+        bool ValidatePassword(string userName, string inputPassword);
+        ResponseUserDataDTO ResponseData(string userName);
+        string GenerateJwtToken(ResponseUserDataDTO responseDataDTO);
+        UserRequestFormDTO registerUser(UserRequestFormDTO addUserDTO);
+        UserRequestFormDTO userUpdateFormDTO(int userId, UserRequestFormDTO updateDTO);
+        User deleteUser(int userId);
     }
 }

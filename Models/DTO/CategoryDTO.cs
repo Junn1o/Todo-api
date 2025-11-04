@@ -3,13 +3,13 @@ namespace Todo_api.Models.DTO
 {
     public class UserCategoryWithTask
     {
-        public Guid category_id { get; set; }
-        public Guid user_id { get; set; }
+        public int category_id { get; set; }
+        public int user_id { get; set; }
         public required string category_name { get; set; }
         public List<TasksDTO> task_list { get; set; }
         public class TasksDTO
         {
-            public Guid task_id { get; set; }
+            public int task_id { get; set; }
             public string title { get; set; }
             public string user_name { get; set; }
             public string? note { get; set; }
@@ -27,7 +27,7 @@ namespace Todo_api.Models.DTO
     }
     public class GetUSerCategory
     {
-        public Guid category_id { get; set; }
+        public int category_id { get; set; }
         public string category_name { get; set; }
     }
     public class CategoryRequestFromDTO

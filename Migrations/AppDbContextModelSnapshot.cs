@@ -24,16 +24,18 @@ namespace Todo_api.Migrations
 
             modelBuilder.Entity("Todo_api.Models.Domain.Category", b =>
                 {
-                    b.Property<Guid>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("CategoryId");
 
@@ -44,9 +46,11 @@ namespace Todo_api.Migrations
 
             modelBuilder.Entity("Todo_api.Models.Domain.Role", b =>
                 {
-                    b.Property<Guid>("RoleId")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
 
                     b.Property<string>("RoleName")
                         .IsRequired()
@@ -54,14 +58,16 @@ namespace Todo_api.Migrations
 
                     b.HasKey("RoleId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Todo_api.Models.Domain.Sub_Task", b =>
                 {
-                    b.Property<Guid>("SubTaskId")
+                    b.Property<int>("SubTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubTaskId"));
 
                     b.Property<bool?>("IsCompleted")
                         .HasColumnType("bit");
@@ -73,8 +79,8 @@ namespace Todo_api.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
 
                     b.HasKey("SubTaskId");
 
@@ -85,12 +91,14 @@ namespace Todo_api.Migrations
 
             modelBuilder.Entity("Todo_api.Models.Domain.Task", b =>
                 {
-                    b.Property<Guid>("TaskId")
+                    b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"));
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
@@ -98,16 +106,16 @@ namespace Todo_api.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsCompleted")
+                    b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsImportance")
+                    b.Property<bool>("IsImportance")
                         .HasColumnType("bit");
 
-                    b.Property<string>("IsNotification")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsNotification")
+                        .HasColumnType("bit");
 
-                    b.Property<bool?>("IsRepeat")
+                    b.Property<bool>("IsRepeat")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifyDate")
@@ -116,15 +124,12 @@ namespace Todo_api.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Progress")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("TaskId");
 
@@ -137,8 +142,8 @@ namespace Todo_api.Migrations
 
             modelBuilder.Entity("Todo_api.Models.Domain.User", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Avatar")
                         .HasColumnType("nvarchar(max)");
@@ -165,18 +170,20 @@ namespace Todo_api.Migrations
 
             modelBuilder.Entity("Todo_api.Models.Domain.User_Role", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("User_Role");
+                    b.ToTable("Users_Roles");
                 });
 
             modelBuilder.Entity("Todo_api.Models.Domain.Category", b =>
@@ -209,7 +216,9 @@ namespace Todo_api.Migrations
 
                     b.HasOne("Todo_api.Models.Domain.User", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 

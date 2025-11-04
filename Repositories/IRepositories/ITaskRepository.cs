@@ -5,13 +5,13 @@ namespace Todo_api.Repositories.IRepositories
 {
     public interface ITaskRepository
     {
-        List<GetAllTaskByUserId> getAllTaskByUserId(Guid userId, int pageSize, int pageNumber);
-        GetTaskByTaskId getTaskByTaskId(Guid taskId);
+        GetAllTaskByUserId getAllTaskByUserId(int userId, int pageSize, int pageNumber);
+        GetTaskByTaskId getTaskByTaskId(int taskId);
         TaskRequestFormDTO addTaskDTO(TaskRequestFormDTO addTaskDTO);
-        TaskRequestFormDTO updateTaskDTO(Guid taskId, Guid userId, TaskRequestFormDTO updateTaskDTO);
+        TaskRequestFormDTO updateTaskDTO(int taskId, int userId, TaskRequestFormDTO updateTaskDTO);
         SubTaskRequestFormDTO addSubTaskDTO(SubTaskRequestFormDTO addSubTaskDTO);
-        SubTaskRequestFormDTO updateSubTaskDTO(Guid subtaskId, Guid taskId, Guid userId,SubTaskRequestFormDTO updateSubTaskDTO);
-        Sub_Task deleteSubTask(Guid subTaskId);
-        Models.Domain.Task deleteTask(Guid taskId);
+        SubTaskRequestFormDTO updateSubTaskDTO(int subtaskId, int taskId, int userId,SubTaskRequestFormDTO updateSubTaskDTO);
+        Sub_Task deleteSubTask(int subTaskId);
+        Models.Domain.Task deleteTask(int taskId);
     }
 }

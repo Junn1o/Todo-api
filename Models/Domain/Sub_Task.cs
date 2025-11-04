@@ -5,8 +5,8 @@ namespace Todo_api.Models.Domain
     public class Sub_Task
     {
         [Key]
-        public Guid SubTaskId { get; set; }
-        public Guid TaskId { get; set; }
+        public int SubTaskId { get; set; }
+        public int TaskId { get; set; }
         public Task Task { get; set; }
         public required string Name { get; set; }
         public bool? IsCompleted { get; set; }
