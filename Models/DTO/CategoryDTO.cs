@@ -33,6 +33,5 @@ namespace Todo_api.Models.DTO
     public class CategoryRequestFromDTO
     {
         public required string category_name { get; set; }
-        public required Guid user_id { get; set; }
     }
 }

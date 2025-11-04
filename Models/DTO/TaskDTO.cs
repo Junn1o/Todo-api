@@ -60,7 +60,7 @@ namespace Todo_api.Models.DTO
         public DateTime? due_date { get; set; }
         public DateTime? modify_date { get; set; }
         public DateTime date_create { get; set; }
-        public required Guid user_id { get; set; }
+        public Guid user_id { get; set; }
         public Guid? category_id { get; set; }
         public List<SubTask> subtask_form { get; set; }
         public class SubTask

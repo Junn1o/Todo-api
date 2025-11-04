@@ -8,9 +8,9 @@ namespace Todo_api.Repositories.IRepositories
         List<GetAllTaskByUserId> getAllTaskByUserId(Guid userId, int pageSize, int pageNumber);
         GetTaskByTaskId getTaskByTaskId(Guid taskId);
         TaskRequestFormDTO addTaskDTO(TaskRequestFormDTO addTaskDTO);
-        TaskRequestFormDTO updateTaskDTO(TaskRequestFormDTO updateTaskDTO);
+        TaskRequestFormDTO updateTaskDTO(Guid taskId, Guid userId, TaskRequestFormDTO updateTaskDTO);
         SubTaskRequestFormDTO addSubTaskDTO(SubTaskRequestFormDTO addSubTaskDTO);
-        SubTaskRequestFormDTO updateSubTaskDTO(SubTaskRequestFormDTO updateSubTaskDTO);
+        SubTaskRequestFormDTO updateSubTaskDTO(Guid subtaskId, Guid taskId, Guid userId,SubTaskRequestFormDTO updateSubTaskDTO);
         Sub_Task deleteSubTask(Guid subTaskId);
         Models.Domain.Task deleteTask(Guid taskId);
     }

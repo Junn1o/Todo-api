@@ -8,7 +8,7 @@ namespace Todo_api.Repositories.IRepositories
         List<GetUSerCategory> getUSerCategories();
         List<UserCategoryWithTask> userCategoryWithTask(Guid userId, Guid categoryId, int pageSize, int pageNumber);
         CategoryRequestFromDTO categoryRequestFromDTO(CategoryRequestFromDTO addCategoryDTO);
-        CategoryRequestFromDTO categoryUpdateFromDTO(CategoryRequestFromDTO updateCategoryDTO);
+        CategoryRequestFromDTO categoryUpdateFromDTO(Guid userId, Guid categoryId, CategoryRequestFromDTO updateCategoryDTO);
         Category deleteCategory(Guid categoryId);
     }
 }

@@ -9,7 +9,7 @@ namespace Todo_api.Repositories.IRepositories
         List<UserListResultDTO> getUserListResult(Guid userId, int pageSize, int pageNumber);
         UserLoginDTO userLogin(UserLoginDTO userLoginDTO);
         UserRequestFormDTO userRequestFormDTO(UserRequestFormDTO addUserDTO);
-        UserRequestFormDTO userUpdateFormDTO(UserRequestFormDTO updateDTO);
+        UserRequestFormDTO userUpdateFormDTO(Guid userId, UserRequestFormDTO updateDTO);
         User deleteUser(Guid userId);
     }
 }
