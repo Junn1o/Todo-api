@@ -1,5 +1,8 @@
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Todo_api.Data;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +16,27 @@ builder.Services.AddSwaggerGen();
 //add connection string
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, options => { 
+        options.EnableRetryOnFailure(
+            maxRetryCount: 5, 
+            maxRetryDelay: TimeSpan.FromSeconds(10), 
+            errorNumbersToAdd: null); 
+    }));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+option.TokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuer = true,
+    ValidateAudience = true,
+    ValidateLifetime = true,
+    ValidateIssuerSigningKey = true,
+    ValidIssuer = Environment.GetEnvironmentVariable("Issuer"),
+    ValidAudience = Environment.GetEnvironmentVariable("Audience"),
+    ClockSkew = TimeSpan.Zero,
+    IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Key")))
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
