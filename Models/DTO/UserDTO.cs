@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace Todo_api.Models.DTO
 {
     public class UserWithTaskDTO
@@ -38,11 +40,21 @@ namespace Todo_api.Models.DTO
     }
     public class UserRequestFormDTO
     {
+        [Required(ErrorMessage = "User name is required.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "User name must be between 3 and 50 characters.")]
         public string user_name { get; set; }
+        [Required(ErrorMessage = "Password is required.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters.")]
         public string password { get; set; }
+        [Required(ErrorMessage = "Name is required.")]
+        [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters.")]
         public string name { get; set; }
         public string? avatar { get; set; }
+
         public IFormFile? file_uri { get; set; }
+        [Required(ErrorMessage = "Date of birth is required.")]
+        [DataType(DataType.Date)]
+        [RegularExpression(@"^\d{2}-\d{2}-\d{4}$", ErrorMessage = "Date of birth must be in DD/MM/YYYY format.")]
         public string date_of_birth { get; set; }
     }
     public class UserLoginDTO

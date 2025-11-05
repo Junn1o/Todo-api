@@ -34,15 +34,15 @@ namespace Todo_api.Repositories
                     avatar = user.Avatar,
                     date_of_birth = user.DateofBirth.ToString("dd/MM/yyyy"),
                 });
+            var totalResult = UserListDomain.Count();
             var skipResults = (pageNumber - 1) * pageSize;
-            if (UserListDomain == null)
+            if (totalResult == 0)
             {
                 return null;
             }
             else
             {
                 var userList = UserListDomain.Skip(skipResults).Take(pageSize).ToList();
-                var totalResult = UserListDomain.Count();
                 var totalPage = (int)Math.Ceiling((double)totalResult / pageSize);
                 var result = new UserListResultDTO
                 {
@@ -81,7 +81,7 @@ namespace Todo_api.Repositories
                 is_completed = tasks.IsCompleted,
                 is_importance = tasks.IsImportance,
                 is_repeat = tasks.IsRepeat,
-                category_name = tasks.Category?.CategoryName ?? "",
+                category_name = tasks.Category.CategoryName,
                 create_date = tasks.CreateDate.ToString("dd/MM/yyyy")
             }).ToList();
             return new UserWithTaskDTO
@@ -99,7 +99,7 @@ namespace Todo_api.Repositories
                 UserName = addUserDTO.user_name,
                 Password = function.HashPassword(addUserDTO.password),
                 DateofBirth = DateTime.ParseExact(addUserDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                Name = addUserDTO.name,
+                Name = addUserDTO.name
             };
             appDbContext.Users.Add(userDomain);
             appDbContext.SaveChanges();
@@ -132,7 +132,7 @@ namespace Todo_api.Repositories
             appDbContext.Sub_Tasks.RemoveRange(userDomain.Tasks.SelectMany(p => p.SubTasks));
             appDbContext.Tasks.RemoveRange(userDomain.Tasks);
             appDbContext.Category.RemoveRange(userDomain.Categories);
-            //appDbContext.Users_Roles.RemoveRange(userDomain.User_Role);
+            appDbContext.Users_Roles.RemoveRange(userDomain.User_Role);
             function.DeleteImage(userDomain.Avatar);
             appDbContext.Users.Remove(userDomain);
             appDbContext.SaveChanges();
@@ -175,26 +175,30 @@ namespace Todo_api.Repositories
         }
         public string GenerateJwtToken(ResponseUserDataDTO responseDataDTO)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Jwt:Key")));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Key")));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, responseDataDTO.user_id.ToString()),
                 new Claim(ClaimTypes.Name, responseDataDTO.user_name.ToString()),
-                new Claim(ClaimTypes.Name, responseDataDTO.name.ToString()),
+                new Claim(ClaimTypes.GivenName, responseDataDTO.name.ToString()),
                 new Claim(ClaimTypes.DateOfBirth, responseDataDTO.date_of_birth.ToString()),
                 new Claim(ClaimTypes.Uri, responseDataDTO.avatar.ToString()),
                 new Claim(ClaimTypes.Role, responseDataDTO.role_name.ToString())
             };
             var token = new JwtSecurityToken(
-                issuer: Environment.GetEnvironmentVariable("Jwt:Issuer"),
-                audience: Environment.GetEnvironmentVariable("Jwt:Audience"),
+                issuer: Environment.GetEnvironmentVariable("Issuer"),
+                audience: Environment.GetEnvironmentVariable("Audience"),
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: credentials
 
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public bool IsUserNameTaken(string userName)
+        {
+            return appDbContext.Users.Any(u => u.UserName == userName);
         }
     }
 }

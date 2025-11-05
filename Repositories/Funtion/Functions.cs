@@ -58,5 +58,20 @@ namespace Todo_api.Repositories.Funtion
                 return filePath;
             }
         }
+        public bool IsValidImageFile(IFormFile file)
+        {
+            var validTypes = new[] { "image/jpeg", "image/png", "image/jpg" };
+            return file != null && validTypes.Contains(file.ContentType.ToLower());
+        }
+        public bool HasValidExtension(string fileName)
+        {
+            var validExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var extension = Path.GetExtension(fileName)?.ToLower();
+            return validExtensions.Contains(extension);
+        }
+        public bool IsValidFileSize(IFormFile file, long maxFileSizeInBytes)
+        {
+            return file != null && file.Length <= maxFileSizeInBytes;
+        }
     }
 }

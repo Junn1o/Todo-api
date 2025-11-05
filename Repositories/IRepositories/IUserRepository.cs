@@ -14,5 +14,6 @@ namespace Todo_api.Repositories.IRepositories
         UserRequestFormDTO registerUser(UserRequestFormDTO addUserDTO);
         UserRequestFormDTO userUpdateFormDTO(int userId, UserRequestFormDTO updateDTO);
         User deleteUser(int userId);
+        bool IsUserNameTaken(string userName);
     }
 }
