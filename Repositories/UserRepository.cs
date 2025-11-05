@@ -17,11 +17,11 @@ namespace Todo_api.Repositories
     {
         public readonly AppDbContext appDbContext;
         private readonly Functions function;
-        public UserRepository(AppDbContext _appDbContext, Functions _function)
+        public UserRepository(AppDbContext _appDbContext, Functions function)
         {
             DotNetEnv.Env.Load();
             this.appDbContext = _appDbContext;
-            this.function = _function;
+            this.function = function;
         }
         public UserListResultDTO getUserListResult(int pageSize, int pageNumber)
         {
@@ -97,7 +97,7 @@ namespace Todo_api.Repositories
             var userDomain = new User
             {
                 UserName = addUserDTO.user_name,
-                Password = function.HashPassword(addUserDTO.password),
+                Password = Functions.HashPassword(addUserDTO.password),
                 DateofBirth = DateTime.ParseExact(addUserDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Name = addUserDTO.name
             };
@@ -116,7 +116,7 @@ namespace Todo_api.Repositories
             userDomain.Name = updateDTO.name;
             userDomain.DateofBirth = DateTime.ParseExact(updateDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (updateDTO.password != null)
-                userDomain.Password = function.HashPassword(updateDTO.password);
+                userDomain.Password = Functions.HashPassword(updateDTO.password);
             if (updateDTO.file_uri != null)
                 userDomain.Avatar = function.UpdateImage(updateDTO.file_uri, userDomain.Avatar);
             appDbContext.SaveChanges();
@@ -162,43 +162,6 @@ namespace Todo_api.Repositories
                     role_name = u.User_Role.Roles.RoleName
                 }).FirstOrDefault();
             return loginData;
-        }
-        public bool ValidatePassword(string userName, string inputPassword)
-        {
-            var user = appDbContext.Users.SingleOrDefault(c => c.UserName == userName);
-            if (user == null)
-                return false;
-            var isPasswordValid = function.VerifyPassword(user.Password, inputPassword);
-            if (!isPasswordValid)
-                return false;
-            return true;
-        }
-        public string GenerateJwtToken(ResponseUserDataDTO responseDataDTO)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Key")));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, responseDataDTO.user_id.ToString()),
-                new Claim(ClaimTypes.Name, responseDataDTO.user_name.ToString()),
-                new Claim(ClaimTypes.GivenName, responseDataDTO.name.ToString()),
-                new Claim(ClaimTypes.DateOfBirth, responseDataDTO.date_of_birth.ToString()),
-                new Claim(ClaimTypes.Uri, responseDataDTO.avatar.ToString()),
-                new Claim(ClaimTypes.Role, responseDataDTO.role_name.ToString())
-            };
-            var token = new JwtSecurityToken(
-                issuer: Environment.GetEnvironmentVariable("Issuer"),
-                audience: Environment.GetEnvironmentVariable("Audience"),
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials
-
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-        public bool IsUserNameTaken(string userName)
-        {
-            return appDbContext.Users.Any(u => u.UserName == userName);
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Todo_api.Repositories.IRepositories
         UserWithTaskDTO userWithTaskDTOs(int userId, int pageSize, int pageNumber);
         UserListResultDTO getUserListResult(int pageSize, int pageNumber);
         UserLoginDTO userLogin(string userName);
-        bool ValidatePassword(string userName, string inputPassword);
+        //bool ValidatePassword(string userName, string inputPassword);
         ResponseUserDataDTO ResponseData(string userName);
-        string GenerateJwtToken(ResponseUserDataDTO responseDataDTO);
+        //string GenerateJwtToken(ResponseUserDataDTO responseDataDTO);
         UserRequestFormDTO registerUser(UserRequestFormDTO addUserDTO);
         UserRequestFormDTO userUpdateFormDTO(int userId, UserRequestFormDTO updateDTO);
         User deleteUser(int userId);
-        bool IsUserNameTaken(string userName);
+        //bool IsUserNameTaken(string userName);
     }
 }

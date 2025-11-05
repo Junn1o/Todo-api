@@ -22,14 +22,14 @@ namespace Todo_api.Controllers
         [HttpPost("register")]
         public IActionResult registerUser([FromForm] UserRequestFormDTO adduserDTO)
         {
-            if (_userRepository.IsUserNameTaken(adduserDTO.user_name))
+            if (_functions.IsUserNameTaken(adduserDTO.user_name))
                 return BadRequest("Username is already taken.");
-            if (!_functions.IsValidImageFile(adduserDTO.file_uri) || !_functions.HasValidExtension(adduserDTO.file_uri.FileName))
+            if (adduserDTO.file_uri != null && (!_functions.IsValidImageFile(adduserDTO.file_uri) || !_functions.HasValidExtension(adduserDTO.file_uri.FileName)))
             {
                 return BadRequest("Invalid image file type.");
             }
 
-            if (!_functions.IsValidFileSize(adduserDTO.file_uri, 2 * 2048 * 2048))
+            if (!_functions.IsValidFileSize(adduserDTO.file_uri, 5 * 1024 * 1024))
             {
                 return BadRequest("File size exceeds limit.");
             }
@@ -40,10 +40,10 @@ namespace Todo_api.Controllers
         public IActionResult login([FromForm] UserLoginDTO loginDTO)
         {
             var credential = _userRepository.userLogin(loginDTO.user_name);
-            if (credential == null || !_userRepository.ValidatePassword(loginDTO.user_name, loginDTO.password))
+            if (credential == null || !_functions.ValidatePassword(loginDTO.user_name, loginDTO.password))
                 return Unauthorized();
             var loginResponse = _userRepository.ResponseData(loginDTO.user_name);
-            var token = _userRepository.GenerateJwtToken(loginResponse);
+            var token = _functions.GenerateJwtToken(loginResponse);
             return Ok(new { token });
         }
         [HttpGet("user/{userId}")]
@@ -71,10 +71,10 @@ namespace Todo_api.Controllers
             if (updateUser != null)
                 return Ok(updateUser);
             else
-                return StatusCode(404);
+                return NotFound();
         }
         [HttpDelete("user")]
-        public IActionResult userDelete([FromForm] int userId)
+        public IActionResult userDelete([FromQuery] int userId)
         {
             var deleteUser = _userRepository.deleteUser(userId);
             if (deleteUser != null)

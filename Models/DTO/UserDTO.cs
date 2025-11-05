@@ -51,7 +51,6 @@ namespace Todo_api.Models.DTO
         [StringLength(100, ErrorMessage = "Name cannot exceed 100 characters.")]
         public string name { get; set; }
         public string? avatar { get; set; }
-
         public IFormFile? file_uri { get; set; }
         [Required(ErrorMessage = "Date of birth is required.")]
         [DataType(DataType.Date)]
