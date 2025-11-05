@@ -40,7 +40,7 @@ namespace Todo_api.Controllers
         public IActionResult login([FromForm] UserLoginDTO loginDTO)
         {
             var credential = _userRepository.userLogin(loginDTO.user_name);
-            if (credential == null || !_userRepository.ValidatePassword(loginDTO.user_name, loginDTO.user_name))
+            if (credential == null || !_userRepository.ValidatePassword(loginDTO.user_name, loginDTO.password))
                 return Unauthorized();
             var loginResponse = _userRepository.ResponseData(loginDTO.user_name);
             var token = _userRepository.GenerateJwtToken(loginResponse);

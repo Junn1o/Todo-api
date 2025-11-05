@@ -44,6 +44,7 @@ namespace Todo_api.Models.DTO
         [StringLength(50, MinimumLength = 3, ErrorMessage = "User name must be between 3 and 50 characters.")]
         public string user_name { get; set; }
         [Required(ErrorMessage = "Password is required.")]
+        [DataType(DataType.Password)]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters.")]
         public string password { get; set; }
         [Required(ErrorMessage = "Name is required.")]
@@ -59,7 +60,11 @@ namespace Todo_api.Models.DTO
     }
     public class UserLoginDTO
     {
+        [Required(ErrorMessage = "User name is required.")]
         public string user_name { get; set; }
+        [Required(ErrorMessage = "Password is required.")]
+        [DataType(DataType.Password)]
+        public string password { get; set; }
     }
     public class ResponseUserDataDTO
     {
