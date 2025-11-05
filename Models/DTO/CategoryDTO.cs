@@ -1,15 +1,15 @@
 ﻿using Todo_api.Models.Domain;
 namespace Todo_api.Models.DTO
 {
-    public class UserCategoryWithTaskDTO
+    public class UserCategoryWithTask
     {
-        public Guid category_id { get; set; }
-        public Guid user_id { get; set; }
+        public int category_id { get; set; }
+        public int user_id { get; set; }
         public required string category_name { get; set; }
         public List<TasksDTO> task_list { get; set; }
         public class TasksDTO
         {
-            public Guid task_id { get; set; }
+            public int task_id { get; set; }
             public string title { get; set; }
             public string user_name { get; set; }
             public string? note { get; set; }
@@ -22,13 +22,16 @@ namespace Todo_api.Models.DTO
             public string modify_date { get; set; }
         }
 
-        public int totalResult { get; set; }
-        public int totalPages { get; set; }
+        public int total_result { get; set; }
+        public int total_pages { get; set; }
+    }
+    public class GetUSerCategory
+    {
+        public int category_id { get; set; }
+        public string category_name { get; set; }
     }
     public class CategoryRequestFromDTO
     {
         public required string category_name { get; set; }
-        public required Guid user_id { get; set; }
-        public Guid category_id { get; set; }
     }
 }

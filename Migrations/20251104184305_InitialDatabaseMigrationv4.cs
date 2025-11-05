@@ -6,16 +6,48 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Todo_api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialDatabaseMigration : Migration
+    public partial class InitialDatabaseMigrationv4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.RoleId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users_Roles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users_Roles", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -24,16 +56,23 @@ namespace Todo_api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserID);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Users_Users_Roles_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users_Roles",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +81,7 @@ namespace Todo_api.Migrations
                         name: "FK_Category_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserID",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -50,40 +89,43 @@ namespace Todo_api.Migrations
                 name: "Tasks",
                 columns: table => new
                 {
-                    TaskID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TaskId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsCompleted = table.Column<bool>(type: "bit", nullable: true),
-                    IsRepeat = table.Column<bool>(type: "bit", nullable: true),
-                    IsImportance = table.Column<bool>(type: "bit", nullable: true),
-                    Progress = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsNotification = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsRepeat = table.Column<bool>(type: "bit", nullable: false),
+                    IsImportance = table.Column<bool>(type: "bit", nullable: false),
+                    IsNotification = table.Column<bool>(type: "bit", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifyDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tasks", x => x.TaskID);
+                    table.PrimaryKey("PK_Tasks", x => x.TaskId);
                     table.ForeignKey(
-                        name: "FK_Tasks_Category_CategoryID",
-                        column: x => x.CategoryID,
+                        name: "FK_Tasks_Category_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId");
                     table.ForeignKey(
                         name: "FK_Tasks_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserID");
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Sub_Tasks",
                 columns: table => new
                 {
-                    SubTaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TaskId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SubTaskId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: true),
                     Position = table.Column<int>(type: "int", nullable: false)
@@ -95,7 +137,7 @@ namespace Todo_api.Migrations
                         name: "FK_Sub_Tasks_Tasks_TaskId",
                         column: x => x.TaskId,
                         principalTable: "Tasks",
-                        principalColumn: "TaskID",
+                        principalColumn: "TaskId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -110,14 +152,19 @@ namespace Todo_api.Migrations
                 column: "TaskId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_CategoryID",
+                name: "IX_Tasks_CategoryId",
                 table: "Tasks",
-                column: "CategoryID");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_UserId",
                 table: "Tasks",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Roles_RoleId",
+                table: "Users_Roles",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -134,6 +181,12 @@ namespace Todo_api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Users_Roles");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
         }
     }
 }

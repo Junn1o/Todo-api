@@ -5,7 +5,7 @@ namespace Todo_api.Models.Domain
     public class User
     {
         [Key]
-        public Guid UserID { get; set; }
+        public int UserId { get; set; }
         public required string UserName { get; set; }
         public required string Password { get; set; }
         public required string Name { get; set; }
@@ -14,5 +14,6 @@ namespace Todo_api.Models.Domain
         public List<Task> Tasks { get; set; }
         // One User have many Category
         public List<Category> Categories { get; set; }
+        public User_Role User_Role { get; set; }
     }
 }
