@@ -5,7 +5,7 @@ namespace Todo_api.Models.DTO
     {
         public int category_id { get; set; }
         public int user_id { get; set; }
-        public required string category_name { get; set; }
+        public string category_name { get; set; }
         public List<TasksDTO> task_list { get; set; }
         public class TasksDTO
         {
@@ -13,11 +13,10 @@ namespace Todo_api.Models.DTO
             public string title { get; set; }
             public string user_name { get; set; }
             public string? note { get; set; }
-            public string? is_completed { get; set; }
-            public string? is_repeat { get; set; }
-            public string? is_importance { get; set; }
-            public string? progress { get; set; }
-            public string? is_notification { get; set; }
+            public bool is_completed { get; set; }
+            public bool is_repeat { get; set; }
+            public bool is_importance { get; set; }
+            public bool is_notification { get; set; }
             public string due_date { get; set; }
             public string modify_date { get; set; }
         }
@@ -32,6 +31,6 @@ namespace Todo_api.Models.DTO
     }
     public class CategoryRequestFromDTO
     {
-        public required string category_name { get; set; }
+        public string category_name { get; set; }
     }
 }
