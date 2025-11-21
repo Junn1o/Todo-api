@@ -17,11 +17,10 @@ namespace Todo_api.Repositories
     {
         public readonly AppDbContext appDbContext;
         private readonly Functions function;
-        public UserRepository(AppDbContext _appDbContext, Functions _function)
+        public UserRepository(AppDbContext _appDbContext, Functions function)
         {
-            DotNetEnv.Env.Load();
             this.appDbContext = _appDbContext;
-            this.function = _function;
+            this.function = function;
         }
         public UserListResultDTO getUserListResult(int pageSize, int pageNumber)
         {
@@ -34,15 +33,15 @@ namespace Todo_api.Repositories
                     avatar = user.Avatar,
                     date_of_birth = user.DateofBirth.ToString("dd/MM/yyyy"),
                 });
+            var totalResult = UserListDomain.Count();
             var skipResults = (pageNumber - 1) * pageSize;
-            if (UserListDomain == null)
+            if (totalResult == 0)
             {
                 return null;
             }
             else
             {
                 var userList = UserListDomain.Skip(skipResults).Take(pageSize).ToList();
-                var totalResult = UserListDomain.Count();
                 var totalPage = (int)Math.Ceiling((double)totalResult / pageSize);
                 var result = new UserListResultDTO
                 {
@@ -81,7 +80,7 @@ namespace Todo_api.Repositories
                 is_completed = tasks.IsCompleted,
                 is_importance = tasks.IsImportance,
                 is_repeat = tasks.IsRepeat,
-                category_name = tasks.Category?.CategoryName ?? "",
+                category_name = tasks.Category.CategoryName,
                 create_date = tasks.CreateDate.ToString("dd/MM/yyyy")
             }).ToList();
             return new UserWithTaskDTO
@@ -97,9 +96,9 @@ namespace Todo_api.Repositories
             var userDomain = new User
             {
                 UserName = addUserDTO.user_name,
-                Password = function.HashPassword(addUserDTO.password),
+                Password = Functions.HashPassword(addUserDTO.password),
                 DateofBirth = DateTime.ParseExact(addUserDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                Name = addUserDTO.name,
+                Name = addUserDTO.name
             };
             appDbContext.Users.Add(userDomain);
             appDbContext.SaveChanges();
@@ -112,11 +111,12 @@ namespace Todo_api.Repositories
         public UserRequestFormDTO userUpdateFormDTO(int userId, UserRequestFormDTO updateDTO)
         {
             var userDomain = appDbContext.Users.FirstOrDefault(ui => ui.UserId == userId);
+            if (userDomain == null) return null;
             userDomain.UserName = userDomain.UserName;
             userDomain.Name = updateDTO.name;
             userDomain.DateofBirth = DateTime.ParseExact(updateDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
             if (updateDTO.password != null)
-                userDomain.Password = function.HashPassword(updateDTO.password);
+                userDomain.Password = Functions.HashPassword(updateDTO.password);
             if (updateDTO.file_uri != null)
                 userDomain.Avatar = function.UpdateImage(updateDTO.file_uri, userDomain.Avatar);
             appDbContext.SaveChanges();
@@ -132,7 +132,7 @@ namespace Todo_api.Repositories
             appDbContext.Sub_Tasks.RemoveRange(userDomain.Tasks.SelectMany(p => p.SubTasks));
             appDbContext.Tasks.RemoveRange(userDomain.Tasks);
             appDbContext.Category.RemoveRange(userDomain.Categories);
-            //appDbContext.Users_Roles.RemoveRange(userDomain.User_Role);
+            appDbContext.Users_Roles.RemoveRange(userDomain.User_Role);
             function.DeleteImage(userDomain.Avatar);
             appDbContext.Users.Remove(userDomain);
             appDbContext.SaveChanges();
@@ -162,39 +162,6 @@ namespace Todo_api.Repositories
                     role_name = u.User_Role.Roles.RoleName
                 }).FirstOrDefault();
             return loginData;
-        }
-        public bool ValidatePassword(string userName, string inputPassword)
-        {
-            var user = appDbContext.Users.SingleOrDefault(c => c.UserName == userName);
-            if (user == null)
-                return false;
-            var isPasswordValid = function.VerifyPassword(user.Password, inputPassword);
-            if (!isPasswordValid)
-                return false;
-            return true;
-        }
-        public string GenerateJwtToken(ResponseUserDataDTO responseDataDTO)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Jwt:Key")));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, responseDataDTO.user_id.ToString()),
-                new Claim(ClaimTypes.Name, responseDataDTO.user_name.ToString()),
-                new Claim(ClaimTypes.Name, responseDataDTO.name.ToString()),
-                new Claim(ClaimTypes.DateOfBirth, responseDataDTO.date_of_birth.ToString()),
-                new Claim(ClaimTypes.Uri, responseDataDTO.avatar.ToString()),
-                new Claim(ClaimTypes.Role, responseDataDTO.role_name.ToString())
-            };
-            var token = new JwtSecurityToken(
-                issuer: Environment.GetEnvironmentVariable("Jwt:Issuer"),
-                audience: Environment.GetEnvironmentVariable("Jwt:Audience"),
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials
-
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
