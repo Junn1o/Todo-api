@@ -16,6 +16,7 @@ namespace Todo_api.Repositories.Funtion
         public Functions(AppDbContext _appDbContext)
         {
             passwordHasher = new PasswordHasher<object>();
+            DotNetEnv.Env.Load();
             this.appDbContext = _appDbContext;
         }
         public static string HashPassword(string password)

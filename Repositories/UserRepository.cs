@@ -19,7 +19,6 @@ namespace Todo_api.Repositories
         private readonly Functions function;
         public UserRepository(AppDbContext _appDbContext, Functions function)
         {
-            DotNetEnv.Env.Load();
             this.appDbContext = _appDbContext;
             this.function = function;
         }
@@ -112,6 +111,7 @@ namespace Todo_api.Repositories
         public UserRequestFormDTO userUpdateFormDTO(int userId, UserRequestFormDTO updateDTO)
         {
             var userDomain = appDbContext.Users.FirstOrDefault(ui => ui.UserId == userId);
+            if (userDomain == null) return null;
             userDomain.UserName = userDomain.UserName;
             userDomain.Name = updateDTO.name;
             userDomain.DateofBirth = DateTime.ParseExact(updateDTO.date_of_birth, "dd/MM/yyyy", CultureInfo.InvariantCulture);
