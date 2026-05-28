@@ -8,8 +8,8 @@ namespace Todo_api.Models.Domain
         public int SubTaskId { get; set; }
         public int TaskId { get; set; }
         public Task Task { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; }
         public bool? IsCompleted { get; set; }
-        public required int Position { get; set; }
+        public int Position { get; set; }
     }
 }
