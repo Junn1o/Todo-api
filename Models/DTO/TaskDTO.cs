@@ -13,13 +13,14 @@ namespace Todo_api.Models.DTO
             public bool is_completed { get; set; }
             public bool is_repeat { get; set; }
             public bool is_importance { get; set; }
-            public string is_notification { get; set; }
+            public bool is_notification { get; set; }
             public string due_date { get; set; }
             public string modify_date { get; set; }
+            public string category_name { get; set; }
         }
         public List<TaskList> task_lists { get; set; }
-        public string total_result {  get; set; }
-        public string total_page { get; set; }
+        public int total_result {  get; set; }
+        public int total_page { get; set; }
     }
     public class GetTaskByTaskId
     {
@@ -30,9 +31,9 @@ namespace Todo_api.Models.DTO
         public bool is_repeat { get; set; }
         public bool is_importance { get; set; }
         public string progress { get; set; }
-        public string is_notification { get; set; }
-        public required DateTime due_date { get; set; }
-        public DateTime modify_date { get; set; }
+        public bool is_notification { get; set; }
+        public string due_date { get; set; }
+        public string modify_date { get; set; }
         public int user_id { get; set; }
         public string user_name { get; set; }
         public int category_id { get; set; }
